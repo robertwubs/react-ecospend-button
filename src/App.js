@@ -9,7 +9,7 @@ function App() {
       <p style={{paddingBottom: 15}}>Total price: <strong>&pound;10,20</strong></p>
 
       <EcospendButton
-        authenticationUrl="https://localhost:8080/authenticate"
+        authenticationUrl="http://localhost:8010/wp-json/whynow/v2/checkout/authorize_ecospend"
         creditor_account={{
           type: 'SortCode',
           identification: '50000012345602',

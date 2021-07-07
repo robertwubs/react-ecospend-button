@@ -15,22 +15,29 @@ class EcospendService {
     }
 
     authorize = async () => {
+        let headers = {
+            'X-Request-ID' : this.generateRandomID(),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        if(this.authenticationUrl){
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+
         try {
             const authResult = await axios.post(this.authenticationUrl || this.token_url, this.authenticationUrl ? null : new URLSearchParams({
                 grant_type: 'client_credentials',
                 client_id: this.client_id,
                 client_secret: this.client_secret,
             }), {
-                headers: {
-                    'X-Request-ID' : this.generateRandomID(),
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
+                headers: headers
             })
             axios.defaults.headers.common["Authorization"] = "Bearer " + authResult.data.access_token
             return true
         } catch(error){
             console.log("Something went wrong while authorizing")
-            console.log(error.response)
+            console.log(error)
             return false
         }
     }
