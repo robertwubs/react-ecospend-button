@@ -33,7 +33,7 @@ class EcospendService {
             }), {
                 headers: headers
             })
-            axios.defaults.headers.common["Authorization"] = "Bearer " + authResult.data.access_token
+            sessionStorage.setItem('ecospendToken', "Bearer " + authResult.data.access_token)
             return true
         } catch(error){
             console.log("Something went wrong while authorizing")
@@ -44,7 +44,7 @@ class EcospendService {
 
     getBanks = async (sandbox = false) => {
         try {
-            const banksResult = await axios.get(`${this.api_url}banks?is_sandbox=${sandbox}`)
+            const banksResult = await axios.get(`${this.api_url}banks?is_sandbox=${sandbox}`, {headers: {'Authorization':sessionStorage.getItem('ecospendToken')}})
             return banksResult.data.data.sort((a, b) => {
                 if (a.name > b.name) return 1
                 if (a.name < b.name) return -1
@@ -70,7 +70,8 @@ class EcospendService {
                 creditor_account
             }, {
                 headers: {
-                    "content-type":"application/json"
+                    "content-type":"application/json",
+                    "Authorization": sessionStorage.getItem('ecospendToken')
                 }
             })
             return paymentResult.data
@@ -83,7 +84,7 @@ class EcospendService {
 
     verifyPayment = async(paymentId) => {
         try {
-            const verifyResult = await axios.get(`${this.api_url}payments/${paymentId}`)
+            const verifyResult = await axios.get(`${this.api_url}payments/${paymentId}`, {headers: {'Authorization':sessionStorage.getItem('ecospendToken')}})
             return verifyResult.data
         } catch(error){
             console.log("Something went wrong while fetching payment information")
