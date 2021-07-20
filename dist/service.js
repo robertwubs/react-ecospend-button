@@ -56,7 +56,7 @@ class EcospendService {
         }), {
           headers: headers
         });
-        _axios.default.defaults.headers.common["Authorization"] = "Bearer " + authResult.data.access_token;
+        sessionStorage.setItem('ecospendToken', "Bearer " + authResult.data.access_token);
         return true;
       } catch (error) {
         console.log("Something went wrong while authorizing");
@@ -69,7 +69,11 @@ class EcospendService {
       let sandbox = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       try {
-        const banksResult = await _axios.default.get("".concat(_this.api_url, "banks?is_sandbox=").concat(sandbox));
+        const banksResult = await _axios.default.get("".concat(_this.api_url, "banks?is_sandbox=").concat(sandbox), {
+          headers: {
+            'Authorization': sessionStorage.getItem('ecospendToken')
+          }
+        });
         return banksResult.data.data.sort((a, b) => {
           if (a.name > b.name) return 1;
           if (a.name < b.name) return -1;
@@ -93,7 +97,8 @@ class EcospendService {
           creditor_account
         }), {
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "Authorization": sessionStorage.getItem('ecospendToken')
           }
         });
         return paymentResult.data;
@@ -106,7 +111,11 @@ class EcospendService {
 
     _defineProperty(this, "verifyPayment", async paymentId => {
       try {
-        const verifyResult = await _axios.default.get("".concat(this.api_url, "payments/").concat(paymentId));
+        const verifyResult = await _axios.default.get("".concat(this.api_url, "payments/").concat(paymentId), {
+          headers: {
+            'Authorization': sessionStorage.getItem('ecospendToken')
+          }
+        });
         return verifyResult.data;
       } catch (error) {
         console.log("Something went wrong while fetching payment information");
