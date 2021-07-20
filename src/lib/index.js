@@ -167,7 +167,10 @@ EcospendButton.propTypes = {
     onFailure: PropTypes.func,
     onSuccess: PropTypes.func,
     payment: PropTypes.shape({
-        amount: PropTypes.number.isRequired,
+        amount: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]).isRequired,
         currency: PropTypes.string.isRequired,
         reference: PropTypes.string.isRequired,
     }).isRequired,
