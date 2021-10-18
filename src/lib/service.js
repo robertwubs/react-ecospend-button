@@ -6,8 +6,8 @@ class EcospendService {
             this.client_id = clientId
             this.client_secret = clientSecret
             this.authenticationUrl = authenticationUrl
-            this.token_url = 'https://iamapi-px01.ecospend.com/connect/token'
-            this.api_url = sandbox ? 'https://pis-api-sandbox.ecospend.com/api/v2.0/' : 'https://pis-api-sandbox.ecospend.com/api/v2.0/'
+            this.token_url = sandbox ? 'https://iamapi-px01.ecospend.com/connect/token' : 'https://iam.ecospend.com/connect/token'
+            this.api_url = sandbox ? 'https://pis-api-sandbox.ecospend.com/api/v2.0/' : 'https://pis-api.ecospend.com/api/v2.0/'
         } else {
             console.log("%cEcospend error: either set up an authorizationUrl prop that returns an object with an 'access_token' field, or setup clientId and clientSecret as props. Refer to the docs for more information.", "background-color: red; color: white; font-weight: bold; font-size: 16px; padding: 10px;")
             return false
